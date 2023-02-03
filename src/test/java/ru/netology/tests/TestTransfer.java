@@ -50,5 +50,75 @@ public class TestTransfer {
             assertEquals(balanceOfCard2 + amount, dashboardPage.getCardBalance(card1));
         }
 
+        @Test
+        void shouldTransferFromCard1ToCard2Amount0() {
+            open("http://localhost:9999");
+            var loginPage = new LogInPage();
+            var authInfo = DataHelper.getAuthInfo();
+            var verificationPage = loginPage.sucessfullLogIn(authInfo);
+            var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+            var dashboardPage = verificationPage.typeCode(verificationCode);
+
+            int balanceOfCard1 = dashboardPage.getCardBalance(0);
+            int balanceOfCard2 = dashboardPage.getCardBalance(1);
+            var transferPage = dashboardPage.replenish(card2);
+            int amount = 0;
+            transferPage.transferMoney(DataHelper.getSecondCardInfo().getCardNumber(),amount);
+            assertEquals(balanceOfCard1 + amount, dashboardPage.getCardBalance(card1));
+            assertEquals(balanceOfCard2 - amount, dashboardPage.getCardBalance(card2));
+        }
+
+        @Test
+        void shouldTransferFromCard2ToCard1Amount0() {
+            open("http://localhost:9999");
+            var loginPage = new LogInPage();
+            var authInfo = DataHelper.getAuthInfo();
+            var verificationPage = loginPage.sucessfullLogIn(authInfo);
+            var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+            var dashboardPage = verificationPage.typeCode(verificationCode);
+
+            int balanceOfCard1 = dashboardPage.getCardBalance(0);
+            int balanceOfCard2 = dashboardPage.getCardBalance(1);
+            var transferPage = dashboardPage.replenish(card1);
+            int amount = 0;
+            transferPage.transferMoney(DataHelper.getSecondCardInfo().getCardNumber(),amount);
+            assertEquals(balanceOfCard1 + amount, dashboardPage.getCardBalance(card1));
+            assertEquals(balanceOfCard2 - amount, dashboardPage.getCardBalance(card2));
+        }
+
+        @Test
+        void shouldTransferFromCard2ToCard1OverLimit() {
+            open("http://localhost:9999");
+            var loginPage = new LogInPage();
+            var authInfo = DataHelper.getAuthInfo();
+            var verificationPage = loginPage.sucessfullLogIn(authInfo);
+            var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+            var dashboardPage = verificationPage.typeCode(verificationCode);
+
+            int balanceOfCard1 = dashboardPage.getCardBalance(0);
+            int balanceOfCard2 = dashboardPage.getCardBalance(1);
+            var transferPage = dashboardPage.replenish(card1);
+            int amount = 200000;
+            transferPage.transferMoney(DataHelper.getSecondCardInfo().getCardNumber(),amount);
+            transferPage.errorMessage();
+        }
+
+        @Test
+        void shouldTransferFromCard1ToCard2OverLimit() {
+            open("http://localhost:9999");
+            var loginPage = new LogInPage();
+            var authInfo = DataHelper.getAuthInfo();
+            var verificationPage = loginPage.sucessfullLogIn(authInfo);
+            var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+            var dashboardPage = verificationPage.typeCode(verificationCode);
+
+            int balanceOfCard1 = dashboardPage.getCardBalance(0);
+            int balanceOfCard2 = dashboardPage.getCardBalance(1);
+            var transferPage = dashboardPage.replenish(card2);
+            int amount = 200000;
+            transferPage.transferMoney(DataHelper.getSecondCardInfo().getCardNumber(),amount);
+            transferPage.errorMessage();
+        }
+
     }
 }
