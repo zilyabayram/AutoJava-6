@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestTransfer {
 
-
-    public class TransferTest {
         private int card1 = 0;
         private int card2 = 1;
 
@@ -119,6 +117,4 @@ public class TestTransfer {
             transferPage.transferMoney(DataHelper.getSecondCardInfo().getCardNumber(),amount);
             transferPage.errorMessage();
         }
-
-    }
 }
